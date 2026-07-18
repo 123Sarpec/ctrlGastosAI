@@ -19,13 +19,24 @@
     </head>
     <body>
 
-        <header class="bg-purple-950 py-5">
+        <header class="bg-sky-800 py-5">
             <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center lg:justify-between">
                  <div class="w-full max-w-100">
-                     <img src="{{ asset('img/logoWblest.png') }}" alt="logo" class="w-full block" />
+                     <img src="{{ asset('img/logo_portada.svg') }}" alt="logo" class="w-full block" />
                   </div>
-            </div>
-            <p>header aqui</p>
+        @if (Route::has('login'))
+                        <nav class="flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0">
+                <a href="{{ route('login') }}"
+                class=" text-white font-bold uppercase p-2"
+               >
+                Iniciar Sesion</a>
+
+                <a href="{{ route('registro') }}"
+                class=" text-white font-bold uppercase border border-white p-2 rounded-lg ml-2"
+                 > Crear Cuenta</a>
+            </nav>
+                    @endif
+
         </header>
 
         @yield('contents')
