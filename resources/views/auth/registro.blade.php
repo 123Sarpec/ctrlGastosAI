@@ -20,10 +20,10 @@ Crear Cuenta
             value="{{ old('name') }}"
         />
     </div>
-    @error('name')
+    {{-- @error('name')
         <p class=" text-red-500 rounded-lg text-sm">{{ $message }}</p>
-    @enderror
-        
+    @enderror --}}
+    <x-mensage-error field="name" />
 
     <div class="space-y-2">
         <label class="font-bold text-2xl block" for="email">Correo Electrónico</label>
@@ -37,10 +37,10 @@ Crear Cuenta
             value="{{ old('email') }}"
         />
     </div>
-    @error('email')
-        <p class=" text-red-500 rounded-lg text-sm">{{ $message }}</p>
-    @enderror
-
+        {{-- @error('email')
+            <p class=" text-red-500 rounded-lg text-sm">{{ $message }}</p>
+        @enderror --}}
+    <x-mensage-error field="email" />
     <div class="space-y-2">
         <label class="font-bold text-2xl block">Contraseña</label>
 
@@ -51,9 +51,10 @@ Crear Cuenta
             name="password"
         />
     </div>
-        @error('password')
+        {{-- @error('password')
         <p class=" text-red-500 rounded-lg text-sm">{{ $message }}</p>
-    @enderror
+    @enderror --}}
+    <x-mensage-error field="password" />
 
     <div class="space-y-2">
         <label class="font-bold text-2xl block" for="password_confirmation">Confirma tu Contraseña</label>
@@ -65,9 +66,10 @@ Crear Cuenta
             name="password_confirmation" 
         />
     </div>
-    @error('password_confirmation')
+    {{-- @error('password_confirmation')
         <p class=" text-red-500 rounded-lg text-sm">{{ $message }}</p>
-    @enderror
+    @enderror --}}
+    <x-mensage-error field="password_confirmation" />
 
     <input 
         type="submit" 
