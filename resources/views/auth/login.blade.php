@@ -10,8 +10,9 @@ Iniciar Sesion
 @if(session('error'))
     {{-- <p class="text-red-500 border border-red-500">{{ session('error') }}</p>
      --}}
-     <x-alert type="error" message="session('error')" /> 
-@endif
+     <x-alert type="error" :message="session('error')" /> 
+     {{-- {{ dd(session('error')) }} --}}
+@endif 
 
 <form method="POST" action="{{ route('login.store') }}" class="mt-14 space-y-5" novalidate>
     <div class="flex flex-col gap-2">

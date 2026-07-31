@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegistroController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,6 +32,15 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 Route::get('/email/verify', function(){
     return view('auth.verficacion');
 })->middleware('auth')->name('verification.notice');
+
+
+Route::post('/email/verificacion-notificacion', function(Request $request) {
+    // return view('auth.verficacion');
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('success', 'Se ha enviado un nuevo enlace de verificación a tu correo electrónico.');
+})->middleware('auth', 'throttle:1,1')->name('verification.send'); //cantidad de peticiones por minuto, en este caso 1 por minuto
+
 
 
 Route::get('/dashboard', function () { 

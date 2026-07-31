@@ -20,9 +20,10 @@ class LoginController extends Controller
         // dd('desde login controller');
         $data = $request->validated();
 
-        if (!Auth::attempt($data)) {
+        if (!Auth::attempt($data, true)) {
             return back()->with('error', 'Credenciales inválidas.');
         }
-
+         
+        return redirect()->intended('dashboard');
     }
 }

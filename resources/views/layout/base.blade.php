@@ -24,8 +24,12 @@
                  <div class="w-full max-w-100">
                      <img src="{{ asset('img/logo_portada.svg') }}" alt="logo" class="w-full block" />
                   </div>
+ <nav class="flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0">
+
+    @auth
+    <p class="text-white text-xl" > {{ auth()->user()->name}}</p>
+        @else
         @if (Route::has('login'))
-                        <nav class="flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0">
                 <a href="{{ route('login') }}"
                 class=" text-white font-bold uppercase p-2"
                >
@@ -34,8 +38,9 @@
                 <a href="{{ route('registro') }}"
                 class=" text-white font-bold uppercase border border-white p-2 rounded-lg ml-2"
                  > Crear Cuenta</a>
-            </nav>
                     @endif
+    @endauth
+</nav>
 
         </header>
 

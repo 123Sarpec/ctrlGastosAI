@@ -9,12 +9,12 @@ use Illuminate\View\Component;
 class Alert extends Component
 {
 
-      public string $type = 'success';
-        public string $message = '';
-    public function __construct()
-    {
 
-    }
+public function __construct(
+    public string $type = 'success',
+    public string $message = '',
+) {
+}
 
     /**
      * Get the view / contents that represent the component.
