@@ -3,8 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegistroController;
 use App\Http\Controllers\Auth\LoginController;
+// use App\Http\Controllers\Auth\CerraSesionController;
+use App\Http\Controllers\CerraSesionController;
+
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,6 +23,8 @@ Route::get('/auth/login',[LoginController::class, 'index'])->name('login');
 Route::post('/auth/login',[LoginController::class, 'store'])->name('login.store');
 
 
+/*cerrar sesion*/
+Route::post('/auth/logout', [CerraSesionController::class, 'store'])->name('logout.store');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
      $request->fulfill();

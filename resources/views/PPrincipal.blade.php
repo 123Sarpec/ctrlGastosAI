@@ -1,16 +1,23 @@
 
-@extends("layout.auth")
+@extends("layout.app")
 
 
 @section('titulo')
-Administra tus presupuestos de manera eficiente
+
+@section('actions')
+
+
+   <div class="sm:flex sm:items-center mt-10">
+         <div class="sm:flex-auto">
+            <h1 class="font-bold text-4xl">Administra tus Presupuestos</h1>
+            <p class="mt-2 text-xl text-gray-500">Administra tus Presupuestos en esta sección</p>
+         </div>
+         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <a href=""
+                  class="block bg-amber-500 text-white w-full px-5 py-3 rounded-lg  font-bold  text-xl cursor-pointer text-center">Nuevo Presupuesto</a>
+         </div>
+   </div>
+
 @endsection
-@section('auto-contents')
-
-   @if (session('success'))
-       {{-- <p class="text-green-500 border border-green-500">{{ session('success') }}</p>
-        --}}
-             <x-alert :message="session('success')" /> 
-
-   @endif
+   @section('dashboard-contents') 
 @endsection
