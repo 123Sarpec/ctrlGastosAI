@@ -8,6 +8,7 @@ use App\Http\Controllers\CerraSesionController;
 
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\PresupuestoController;
 
 
 Route::get('/', function () {
@@ -49,6 +50,12 @@ Route::post('/email/verificacion-notificacion', function(Request $request) {
 
 
 
-Route::get('/dashboard', function () { 
-    return view('PPrincipal');
-})->middleware(['auth', 'verified'])->name('dashboard'); 
+// Route::get('/dashboard', function () { 
+//     return view('PPrincipal');
+// })->middleware(['auth', 'verified'])->name('dashboard'); 
+
+
+Route::prefix('dashboard')->group(function () {
+        Route::get('/', [PresupuestoController::class, 'index'])->name('dashboard'); 
+        Route::get('/Presupuestos/crear', [PresupuestoController::class, 'create'])->name('Presupuestos.create'); 
+}); 
