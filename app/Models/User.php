@@ -38,4 +38,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function presupuestos()
+    {
+        return $this->hasMany(Presupuesto::class);
+    }
 }

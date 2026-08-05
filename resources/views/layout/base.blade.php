@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    {{-- <body class="min-h-screen bg-gray-100 text-gray-700 transition-colors duration-300 dark:bg-gray-900 dark:text-white"> --}}
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,7 +46,12 @@
 </nav>
 
         </header>
-
+@if (session('success'))
+    <div class="max-w-6xl mx-auto">
+        {{-- {{ session('success') }} --}}
+        <x-alert :message="session('success')" />
+    </div>
+@endif
         @yield('contents')
    </body>
 

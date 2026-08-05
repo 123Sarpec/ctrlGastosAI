@@ -4,7 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Presupuesto;
 use Illuminate\Http\Request;
+use App\Http\Requests\PresupuestoRequest;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Attributes\Controllers\Prefix;
+use Illuminate\Routing\Attributes\Controllers\Authorize;
+
+
 
 
 #[Middleware('auth')]
@@ -16,8 +22,14 @@ class PresupuestoController extends Controller
      */
     public function index()
     {
+         $presupuestos = Auth::user()->presupuestos()->get();
+
         // la pagia de inicio del dashboard, donde se mostrara el presupuesto general y los presupuestos por metas
-            return view('PPrincipal');
+            return view('PPrincipal', [
+                // 'presupuestos' => Auth::user()->presupuestos()->get(),
+                'presupuestos' => $presupuestos
+            ]);
+ 
 
     }
 
@@ -32,9 +44,11 @@ class PresupuestoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PresupuestoRequest $request)
     {
-        //
+
+        $presupuesto = Auth::user()->presupuestos()->create($request->validated());
+        return redirect()->route('dashboard')->with('success', 'Presupuesto creado correctamente.');
     }
 
     /**
@@ -48,24 +62,34 @@ class PresupuestoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+        #[Authorize('update', 'presupuesto')]
     public function edit(Presupuesto $presupuesto)
     {
-        //
+        // dd($presupuesto); 
+        // dd($presupuesto->name);
+        // dd($presupuesto->toArray()); 
+        return view('presupuestos.EditarPresupuesto', [
+            'presupuesto' => $presupuesto
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Presupuesto $presupuesto)
+    #[Authorize('update', 'presupuesto')]
+    public function update(PresupuestoRequest $request, Presupuesto $presupuesto)
     {
-        //
+        $presupuesto->update($request->validated());
+        return redirect()->route('dashboard')->with('success', 'Presupuesto actualizado correctamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
+    #[Authorize('delete', 'presupuesto')]
     public function destroy(Presupuesto $presupuesto)
     {
-        //
+        $presupuesto->delete();
+        return redirect()->route('dashboard')->with('success', 'Presupuesto eliminado correctamente.');
     }
 }

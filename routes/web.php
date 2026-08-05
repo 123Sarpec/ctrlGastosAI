@@ -5,7 +5,8 @@ use App\Http\Controllers\Auth\RegistroController;
 use App\Http\Controllers\Auth\LoginController;
 // use App\Http\Controllers\Auth\CerraSesionController;
 use App\Http\Controllers\CerraSesionController;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\PresupuestoController;
@@ -27,13 +28,36 @@ Route::post('/auth/login',[LoginController::class, 'store'])->name('login.store'
 /*cerrar sesion*/
 Route::post('/auth/logout', [CerraSesionController::class, 'store'])->name('logout.store');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-     $request->fulfill();
+// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//      $request->fulfill();
 
-     return redirect()->route('dashboard')->with('success', 'Correo electrónico verificado correctamente.');
+//      return redirect()->route('dashboard')->with('success', 'Correo electrónico verificado correctamente.');
 
-    // Implementation for email verification
-})->middleware(['auth', 'signed'])->name('verification.verify');
+//     // Implementation for email verification
+// })->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
+
+    $user = User::findOrFail($id);
+
+    // Validar que el hash pertenece al correo del usuario
+    if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
+        abort(403, 'Enlace de verificación inválido');
+    }
+
+    // Verificar correo
+    if (!$user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+    }
+
+    // Opcional: iniciar sesión con el usuario verificado
+    Auth::login($user);
+
+    return redirect()
+        ->route('dashboard')
+        ->with('success', 'Correo electrónico verificado correctamente.');
+
+})->middleware('signed')->name('verification.verify');
 
 
 Route::get('/email/verify', function(){
@@ -58,4 +82,9 @@ Route::post('/email/verificacion-notificacion', function(Request $request) {
 Route::prefix('dashboard')->group(function () {
         Route::get('/', [PresupuestoController::class, 'index'])->name('dashboard'); 
         Route::get('/Presupuestos/crear', [PresupuestoController::class, 'create'])->name('Presupuestos.create'); 
+        Route::post('/Presupuestos/crear', [PresupuestoController::class, 'store'])->name('Presupuestos.store'); 
+
+        Route::get('/Presupuestos/{presupuesto}/edit', [PresupuestoController::class, 'edit'])->name('Presupuestos.edit');  
+        Route::put('/Presupuestos/{presupuesto}', [PresupuestoController::class, 'update'])->name('Presupuestos.update');  
+        Route::delete('/Presupuestos/{presupuesto}', [PresupuestoController::class, 'destroy'])->name('Presupuestos.destroy');  
 }); 
