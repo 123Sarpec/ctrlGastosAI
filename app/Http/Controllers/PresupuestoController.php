@@ -9,6 +9,7 @@ use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Attributes\Controllers\Prefix;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
+use Inertia\Inertia;
 
 
 
@@ -22,15 +23,13 @@ class PresupuestoController extends Controller
      */
     public function index()
     {
-         $presupuestos = Auth::user()->presupuestos()->get();
+        $presupuestos = Auth::user()->presupuestos()->get();
 
         // la pagia de inicio del dashboard, donde se mostrara el presupuesto general y los presupuestos por metas
-            return view('PPrincipal', [
-                // 'presupuestos' => Auth::user()->presupuestos()->get(),
-                'presupuestos' => $presupuestos
-            ]);
- 
-
+        return view('PPrincipal', [
+            // 'presupuestos' => Auth::user()->presupuestos()->get(),
+            'presupuestos' => $presupuestos
+        ]);
     }
 
     /**
@@ -56,13 +55,14 @@ class PresupuestoController extends Controller
      */
     public function show(Presupuesto $presupuesto)
     {
-        //
+        // dd('dedes swho');
+        return Inertia::render('Presupuestos/Show');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-        #[Authorize('update', 'presupuesto')]
+    #[Authorize('update', 'presupuesto')]
     public function edit(Presupuesto $presupuesto)
     {
         // dd($presupuesto); 

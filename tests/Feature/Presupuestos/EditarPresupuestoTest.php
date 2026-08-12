@@ -28,6 +28,10 @@ it('does not allow guests to view the edit budget form', function () {
     $user = User::factory()->create([
         'email_verified_at' => now(),
     ]);
+    $presupuesto = Presupuesto::factory()->for($user)->create();
+    $response =   $this->get(route('Presupuestos.edit', $presupuesto));
+    $response->assertRedirect(route('login'));
+
 
 });
 
@@ -35,5 +39,16 @@ it('does not allow other users to view the edit budget form', function () {
     $owner = User::factory()->create([
         'email_verified_at' => now(),
     ]);
-    
+
+    $otherOwner = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $presupuesto = Presupuesto::factory()->for($owner)->create();
+
+    $response = $this->actingAs($otherOwner)
+        ->get(route('Presupuestos.edit', $presupuesto));
+
+    $response->assertForbidden();
+    $response->assertStatus(403);
 });

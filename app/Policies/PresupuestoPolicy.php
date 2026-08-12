@@ -31,8 +31,6 @@ class PresupuestoPolicy
      */
     public function delete(User $user, Presupuesto $presupuesto): Response
     {
-        return $user->id === $presupuesto->user_id ? Response::allow() : Response::deny('no tiens permiso para eliminar este presupuesto');
+        return $user->id === $presupuesto->user_id ? Response::allow() : Response::deny('no tienes permiso para eliminar este presupuesto');
     }
-
-
 }

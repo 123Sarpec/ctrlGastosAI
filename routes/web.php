@@ -17,12 +17,12 @@ Route::get('/', function () {
 });
 
 
-Route::get('/auth/registro',[RegistroController::class, 'index'])->name('registro');
-Route::post('/auth/registro',[RegistroController::class, 'store'])->name('registro.store');
+Route::get('/auth/registro', [RegistroController::class, 'index'])->name('registro');
+Route::post('/auth/registro', [RegistroController::class, 'store'])->name('registro.store');
 
 
-Route::get('/auth/login',[LoginController::class, 'index'])->name('login'); 
-Route::post('/auth/login',[LoginController::class, 'store'])->name('login.store');
+Route::get('/auth/login', [LoginController::class, 'index'])->name('login');
+Route::post('/auth/login', [LoginController::class, 'store'])->name('login.store');
 
 
 /*cerrar sesion*/
@@ -56,16 +56,15 @@ Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
     return redirect()
         ->route('dashboard')
         ->with('success', 'Correo electrónico verificado correctamente.');
-
 })->middleware('signed')->name('verification.verify');
 
 
-Route::get('/email/verify', function(){
+Route::get('/email/verify', function () {
     return view('auth.verficacion');
 })->middleware('auth')->name('verification.notice');
 
 
-Route::post('/email/verificacion-notificacion', function(Request $request) {
+Route::post('/email/verificacion-notificacion', function (Request $request) {
     // return view('auth.verficacion');
     $request->user()->sendEmailVerificationNotification();
 
@@ -80,11 +79,15 @@ Route::post('/email/verificacion-notificacion', function(Request $request) {
 
 
 Route::prefix('dashboard')->group(function () {
-        Route::get('/', [PresupuestoController::class, 'index'])->name('dashboard'); 
-        Route::get('/Presupuestos/crear', [PresupuestoController::class, 'create'])->name('Presupuestos.create'); 
-        Route::post('/Presupuestos/crear', [PresupuestoController::class, 'store'])->name('Presupuestos.store'); 
+    Route::get('/', [PresupuestoController::class, 'index'])->name('dashboard');
+    Route::get('/Presupuestos/crear', [PresupuestoController::class, 'create'])->name('Presupuestos.create');
+    Route::post('/Presupuestos/crear', [PresupuestoController::class, 'store'])->name('Presupuestos.store');
 
-        Route::get('/Presupuestos/{presupuesto}/edit', [PresupuestoController::class, 'edit'])->name('Presupuestos.edit');  
-        Route::put('/Presupuestos/{presupuesto}', [PresupuestoController::class, 'update'])->name('Presupuestos.update');  
-        Route::delete('/Presupuestos/{presupuesto}', [PresupuestoController::class, 'destroy'])->name('Presupuestos.destroy');  
-}); 
+    Route::get('/Presupuestos/{presupuesto}/edit', [PresupuestoController::class, 'edit'])->name('Presupuestos.edit');
+    Route::get('/Presupuestos/{presupuesto}/edit', [PresupuestoController::class, 'edit'])->name('Presupuestos.edit');
+
+    Route::get('/Presupuestos/{presupuesto}/show', [PresupuestoController::class, 'show'])->name('Presupuestos.show');
+
+    Route::put('/Presupuestos/{presupuesto}', [PresupuestoController::class, 'update'])->name('Presupuestos.update');
+    Route::delete('/Presupuestos/{presupuesto}', [PresupuestoController::class, 'destroy'])->name('Presupuestos.destroy');
+});
