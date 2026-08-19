@@ -2,9 +2,9 @@
 import { createInertiaApp } from '@inertiajs/react'
 
 createInertiaApp({
-    title: title => `CashTrackr - ${title}`,
+    title: title => `Ver Presupuesto - ${title}`,
     pages: {
         path: './Pages',
         extension: '.tsx',
     },
-})
+}) 

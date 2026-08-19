@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 #[Fillable(['name', 'amount', 'type', 'user_id'])]
 class Presupuesto extends Model
 {
-    
+
     use softDeletes, HasFactory;
-/*castrar el tipo de presupuesto a la clase PresupuestoTipo*/
+    /*castrar el tipo de presupuesto a la clase PresupuestoTipo*/
     protected $casts = [
         'type' => PresupuestoTipo::class,
     ];
@@ -26,13 +26,23 @@ class Presupuesto extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function isGeneral() : bool
+
+
+
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
+
+
+
+
+    public function isGeneral(): bool
     {
         return $this->type === PresupuestoTipo::General;
     }
-        public function isGoal() : bool
+    public function isGoal(): bool
     {
         return $this->type === PresupuestoTipo::Goal;
     }
-
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ExpenseCategoria;
 use App\Models\Presupuesto;
 use Illuminate\Http\Request;
 use App\Http\Requests\PresupuestoRequest;
@@ -53,10 +54,18 @@ class PresupuestoController extends Controller
     /**
      * Display the specified resource.
      */
+    #[Authorize('view', 'presupuesto')]
     public function show(Presupuesto $presupuesto)
     {
         // dd('dedes swho');
-        return Inertia::render('Presupuestos/Show');
+        // $name = 'wilmer';
+        // $categories = collect(ExpenseCategoria::class)
+        return Inertia::render('Presupuestos/Show', [
+            // 'name' => $name
+            'presupuesto' => collect(ExpenseCategoria::cases())->map(fn($categoria) => [
+                'value' => $categoria->value
+            ])
+        ]);
     }
 
     /**
