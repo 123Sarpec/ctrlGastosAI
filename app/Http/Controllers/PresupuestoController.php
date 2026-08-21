@@ -57,14 +57,12 @@ class PresupuestoController extends Controller
     #[Authorize('view', 'presupuesto')]
     public function show(Presupuesto $presupuesto)
     {
-        // dd('dedes swho');
-        // $name = 'wilmer';
-        // $categories = collect(ExpenseCategoria::class)
         return Inertia::render('Presupuestos/Show', [
-            // 'name' => $name
-            'presupuesto' => collect(ExpenseCategoria::cases())->map(fn($categoria) => [
-                'value' => $categoria->value
-            ])
+            'presupuesto' => $presupuesto,
+            'categories' => collect(ExpenseCategoria::cases())->map(fn($categoria) => [
+                'value' => $categoria->value,
+                'label' => $categoria->Label()
+            ]),
         ]);
     }
 

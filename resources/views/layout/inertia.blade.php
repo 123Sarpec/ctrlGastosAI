@@ -9,6 +9,7 @@
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @routes
     <x-inertia::head />
     @viteReactRefresh
 
@@ -32,6 +33,7 @@
                 <p class="text-white text-xl">Hola: {{ auth()->user()->name }}</p>
                 <x-dropdown-menu />
                 @endauth
+            </nav>
         </div>
     </header>
 

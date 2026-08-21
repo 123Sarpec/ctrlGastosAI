@@ -11,19 +11,19 @@
 
 
     <el-menu anchor="bottom end" popover
-        class="w-56 origin-bottom-right rounded-md bg-white shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+        class="w-56 origin-bottom-right rounded-md bg-gray-100 shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
         <div class="py-1">
             <a href="{{ route('Presupuestos.show', $presupuesto) }}"
                 class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5 dark:focus:text-white">Ver Presupuesto</a>
 
             <a href="{{ route('Presupuestos.edit', $presupuesto) }}"
-                class="block px-4 py-2 text-sm text-white focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5 dark:focus:text-white">Editar Presupuesto</a>
+                class="block px-4 py-2 text-sm  focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5 dark:focus:text-white">Editar Presupuesto</a>
 
             <button
                 type="button"
                 command="show-modal"
                 commandfor="delete-dialog-{{ $presupuesto->id }}"
-                class="block px-4 py-2 text-sm text-white focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5 dark:focus:text-white">Eliminar Presupuesto</a>
+                class="block px-4 py-2 text-sm  focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5 dark:focus:text-white">Eliminar Presupuesto</a>
             </button>
         </div>
     </el-menu>

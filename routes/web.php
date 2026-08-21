@@ -5,11 +5,13 @@ use App\Http\Controllers\Auth\RegistroController;
 use App\Http\Controllers\Auth\LoginController;
 // use App\Http\Controllers\Auth\CerraSesionController;
 use App\Http\Controllers\CerraSesionController;
+use App\Http\Controllers\ExpenseController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\PresupuestoController;
+// use App\Http\Controllers\ExpenseController;
 
 
 Route::get('/', function () {
@@ -90,4 +92,8 @@ Route::prefix('dashboard')->group(function () {
 
     Route::put('/Presupuestos/{presupuesto}', [PresupuestoController::class, 'update'])->name('Presupuestos.update');
     Route::delete('/Presupuestos/{presupuesto}', [PresupuestoController::class, 'destroy'])->name('Presupuestos.destroy');
+
+
+    /*gasto*/
+    Route::post('/Presupuestos/{presupuesto}/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
 });
