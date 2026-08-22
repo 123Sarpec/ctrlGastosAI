@@ -21,9 +21,10 @@ class ExpenseController extends Controller
     }
 
 
-    public function update(Request $request, Expense $expense)
+    public function update(ExpenseRequest $request, Presupuesto $presupuesto, Expense $expense)
     {
-        // 
+        $expense->update($request->validated());
+        return redirect()->route('Presupuestos.show', $presupuesto)->with('success', 'Gasto actualizado correctamente.');
     }
 
     public function destroy(Expense $expense)

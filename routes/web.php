@@ -96,4 +96,6 @@ Route::prefix('dashboard')->group(function () {
 
     /*gasto*/
     Route::post('/Presupuestos/{presupuesto}/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
+    Route::put('/Presupuestos/{presupuesto}/expenses/{expense}', [ExpenseController::class, 'update'])->name('expenses.update');
+    // Route::delete('/Presupuestos/{presupuesto}/expenses', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
 });

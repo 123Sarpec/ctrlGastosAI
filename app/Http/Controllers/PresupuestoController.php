@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Attributes\Controllers\Prefix;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
 use Inertia\Inertia;
+use App\Models\Expense;
 
 
 
@@ -57,8 +58,18 @@ class PresupuestoController extends Controller
     #[Authorize('view', 'presupuesto')]
     public function show(Presupuesto $presupuesto)
     {
+        // mosrtar resultado de gasto y de maner ordenada los gastos
+        // $expenses = Expense::where('presupuesto_id', $presupuesto->id)->orderBy('created_at', 'desc')->get();
+        // $expenses = $presupuesto->expenses()->latest()->get();
+
+        $presupuesto->load([
+            'expenses' => fn($query) => $query->latest()
+        ]);
+        $spent = $presupuesto->expenses->sum('amount');
+        // dd($expenses);
         return Inertia::render('Presupuestos/Show', [
             'presupuesto' => $presupuesto,
+            'spent' => $spent,
             'categories' => collect(ExpenseCategoria::cases())->map(fn($categoria) => [
                 'value' => $categoria->value,
                 'label' => $categoria->Label()

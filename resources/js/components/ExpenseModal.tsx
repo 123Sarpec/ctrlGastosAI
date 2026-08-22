@@ -1,4 +1,4 @@
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { useExpenseModalStore } from '@/stores/expense.modal';
 import ExpenseForm from './ExpensForm';
 export default function ExpenseModal() {
@@ -20,9 +20,7 @@ export default function ExpenseModal() {
                             transition
                             className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-2xl sm:p-6 data-closed:sm:translate-y-0 data-closed:sm:scale-95 dark:bg-gray-800 dark:outline dark:-outline-offset-1 dark:outline-white/10"
                         >
-                            <DialogTitle as="h3" className="text-4xl font-black mt-10 text-center">
-                                Nuevo Gasto
-                            </DialogTitle>
+
 
                             {/* Formulario aquí */}
                             <ExpenseForm />

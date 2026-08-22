@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('amount', 10, 2);
-            $table->string('category')->default('Otros');
+            $table->string('category')->default('other');
             $table->foreignId('presupuesto_id')->constrained()->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();

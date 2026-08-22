@@ -1,35 +1,52 @@
 import { Head, usePage } from "@inertiajs/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Presupuesto } from "@/types/presupuestos";
 import { Category } from "@/types/category";
+import { ToastContainer, toast } from "react-toastify";
 
-import MontoDisponible from "@/components/MontoDisponible";
+import AmountDisplay from "@/components/MontoDisponible";
 import ExpenseModal from "@/components/ExpenseModal";
 import { useExpenseModalStore } from "@/stores/expense.modal";
+import { formatearCantidad, formatearFecha } from "@/utils";
+import ProgressBar from "@/components/ProgressBar";
+import ExpenseDropdown from "@/components/ExpenseDropwn";
 
 type Props = {
     presupuesto: Presupuesto;
     categories: Category[];
+    spent: string;
 };
 
-export default function Show({ presupuesto, categories }: Props) {
+export default function Show({ presupuesto, categories, spent }: Props) {
 
-    const openModal = useExpenseModalStore(
-        (state) => state.openModal
-    );
+    const openModal = useExpenseModalStore((state) => state.openModal);
 
     const { flash } = usePage().props;
-
+    /*mensaje de exito*/
     useEffect(() => {
-        useExpenseModalStore
-            .getState()
-            .setPresupuesto(presupuesto);
+        if (flash.success) {
+            toast.success(flash.success);
+        }
+    }, [flash]);
 
-        useExpenseModalStore
-            .getState()
-            .setCategories(categories);
+    /*para que el modal tenga la informacion del presupuesto y las categorias*/
+    useEffect(() => {
+        useExpenseModalStore.getState().setPresupuesto(presupuesto);
+        useExpenseModalStore.getState().setCategories(categories);
     }, [presupuesto, categories]);
+
+    /*calcular porcentaje usado*/
+    const restatante = +presupuesto.amount - +spent;
+    const porcentajeUsed = +((+spent / +presupuesto.amount) * 100).toFixed(2);
+    const [progress, setProgress] = useState(0);
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setProgress(porcentajeUsed);
+        }, 100)
+
+        return () => clearTimeout(timeout);
+    }, [porcentajeUsed]);
 
     return (
         <>
@@ -50,36 +67,36 @@ export default function Show({ presupuesto, categories }: Props) {
                                     y revisa cuánto dinero tienes disponible.
                                 </p>
                             </div>
-
                             <a
                                 href="/dashboard"
                                 className="inline-flex w-full items-center justify-center rounded-lg bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700 sm:w-auto"
                             >
                                 Volver a presupuestos
                             </a>
-
                         </div>
                     </section>
+                    <main className="grid grid-cols-1 md:grid-cols-2 items-center rounded-2xl border border-gray-100">
 
-                    {/* TARJETAS DE DINERO */}
-                    <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="flex justify-center">
+                            <ProgressBar porcentajeUsed={progress} />
+                        </div>
+                        <div className="space-y-4">
+                            <AmountDisplay
+                                label="Presupuesto"
+                                amount={Number(presupuesto.amount)}
+                            />
 
-                        <MontoDisponible
-                            label="Presupuesto"
-                            amount={Number(presupuesto.amount)}
-                        />
+                            <AmountDisplay
+                                label="Gastado"
+                                amount={+spent}
+                            />
 
-                        <MontoDisponible
-                            label="Gastado"
-                            amount={0}
-                        />
-
-                        <MontoDisponible
-                            label="Restante"
-                            amount={Number(presupuesto.amount)}
-                        />
-
-                    </section>
+                            <AmountDisplay
+                                label="Restante"
+                                amount={restatante}
+                            />
+                        </div>
+                    </main>
 
                     {/* GASTOS */}
                     <section className="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-200">
@@ -106,29 +123,100 @@ export default function Show({ presupuesto, categories }: Props) {
                             </button>
 
                         </div>
+                        {presupuesto.expenses?.length ? (
+                            <>
+                                <div className="p-5 sm:p-6">
+                                    <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-10 ">
+                                        <table className="relative min-w-full">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">
+                                                        <span className="sr-only">
+                                                            Gastos
+                                                        </span>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <span className="sr-only">
+                                                            Acciones
+                                                        </span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
 
-                        {/* CONTENIDO */}
-                        <div className="p-5 sm:p-6">
+                                            <tbody className="divide-y divide-gray-300 ">
+                                                {presupuesto.expenses.map((expense) => (
+                                                    <tr key={expense.id} className="flex items-center justify-between">
 
-                            <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-10 text-center">
-                                <h3 className="mt-4 text-base font-semibold text-gray-900">
-                                    No hay gastos registrados
-                                </h3>
-                                <p className="mx-auto mt-1 max-w-md text-sm text-gray-500">
-                                    Cuando agregues un gasto, aparecerá aquí
-                                    para que puedas llevar el control de tu dinero.
-                                </p>
+                                                        <td className="relative px-10 pb-5 gap-2">
+                                                            {presupuesto.type === 'general' && (
+                                                                <p className={`text-sm text-gray-900 border-b rounded-2xl text-center ${expense.category_color}`}>
+                                                                    {expense.category_label}
+                                                                </p>
+                                                            )}
 
-                            </div>
+                                                            <p className="text-xl font-bold text-gray-500">
+                                                                {expense.name}
+                                                            </p>
+                                                            <p className="text-lg text-gray-500">
+                                                                {formatearCantidad(expense.amount)}
+                                                            </p>
+                                                            <p className="text-sm text-gray-400"> Agregado el: {formatearFecha(expense.created_at)}</p>
+                                                        </td>
 
-                        </div>
+                                                        <td className="flex justify-end gap-3 px-10 py-6">
+                                                            <ExpenseDropdown expense={expense} />
+                                                        </td>
+                                                    </tr>
+                                                ))}
+
+                                                <tr className="flex items-center justify-between">
+
+                                                    <td className="relative px-10 pb-5">
+
+                                                        <p className="absolute left-0 top-0 inline-block w-40 rounded-br-2xl px-3 py-1 text-sm font-medium">
+                                                            Categoría
+                                                        </p>
+
+                                                        <p className="text-xl font-bold text-gray-500">
+                                                        </p>
+
+                                                        <p className="text-lg text-gray-500">
+                                                        </p>
+
+                                                        <p className="text-sm text-gray-400">
+                                                        </p>
+
+                                                    </td>
+
+                                                    <td className="flex justify-end gap-3 px-10 py-6">
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <p className="mt-10 text-center text-xl">
+                                No hay gastos.
+                                <button
+                                    type="button"
+                                    onClick={openModal}
+                                    className="ml-2 text-amber-500 hover:text-amber-600"
+                                >
+                                    Comienza creando uno
+                                </button>
+                            </p>
+                        )}
 
                     </section>
-
                 </div>
             </div>
 
             <ExpenseModal />
+            <ToastContainer />
         </>
     );
 }
