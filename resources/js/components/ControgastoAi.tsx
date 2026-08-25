@@ -16,7 +16,9 @@ type Props = {
 export default function CashTrackrAgent({ budgetId, name }: Props) {
 
     const [input, setInput] = useState('');
-    const fileInput = useRef<HTMLInputElement>(null);
+    const [isScanning, setIsScanning] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
 
     const { sendMessage, messages, status, setMessages } = useChat({
         transport: new DefaultChatTransport({
@@ -35,33 +37,71 @@ export default function CashTrackrAgent({ budgetId, name }: Props) {
 
         }
     })
-    const handelImagenUpdate = async (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const file = e.target.files?.[0];
-
-        if (!file) return;
-
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+        setIsScanning(true);
+        setMessages(prev => [
+            ...prev,
+            {
+                id: crypto.randomUUID(),
+                role: 'user' as const,
+                content: 'Imagen subida correctamente',
+                parts: [{ type: 'text', text: 'Imagen subida correctamente' }],
+            }
+        ])
         try {
+            const csrfToken = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content ?? ''
+            const formData = new FormData()
+            formData.append('image', file)
+
+            const response = await fetch(`/dashboard/Presupuestos/${budgetId}/addimage`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+                credentials: 'same-origin',
+                body: formData
+            })
+            const data = await response.json()
+            console.log('ADD TICKET RESPONSE:', {
+                // status: response.status,
+                // ok: response.ok,
+                // data,
+            })
             setMessages(prev => [
                 ...prev,
                 {
                     id: crypto.randomUUID(),
-                    role: 'user' as const,
-                    content: 'Tu factura/boleta se subió correctamente',
-                    parts: [
-                        {
-                            type: 'text' as const,
-                            text: 'Tu factura/boleta se subió correctamente',
-                        },
-                    ],
-                },
-            ]);
+                    role: 'assistant' as const,
+                    content: data.message,
+                    parts: [{ type: 'text', text: data.message }],
+                }
+            ])
+            if (data.success) {
+                toast.success('Ticket agregado correctamente');
+                router.reload();
+            }
         } catch (error) {
-            console.error(error);
+            console.error('Error al subir la imagen', error)
+            setMessages(prev => [
+                ...prev,
+                {
+                    id: crypto.randomUUID(),
+                    role: 'assistant' as const,
+                    content: 'Error al subir la imagen, intentalo de nuevo',
+                    parts: [{ type: 'text', text: 'Error al subir la imagen, intentalo de nuevo' }],
+                }
+            ])
+        } finally {
+            setIsScanning(false);
+            if (fileInputRef.current) fileInputRef.current.value = '';
         }
-    };
-    // console.log(messages)
+
+    }
+    // /*deslaivilitar el boton cuando es pensando la <ia></ia>
+    const isBusy = status === 'streaming' || status === 'submitted' || isScanning;
 
     return (
         <section className='p-10 lg:px-5 shadow-lg mt-10'>
@@ -86,24 +126,16 @@ export default function CashTrackrAgent({ budgetId, name }: Props) {
                                     <strong>
                                         {m.role === 'user' ? name + ': ' : 'ChatBlest: '}
                                     </strong>
-
                                     {text.replace('[EXPENSE_CREATED]', '').trim()}
                                 </p>
                             );
                         })}
                     </div>
                 ))}
-                {status === 'streaming' && (
-                    <div className="bg-gray-100 text-black mr-auto rounded-tl-none rounded-lg p-3 mt-4 max-w-[80%] lg:max-w-[60%]">
-                        <p className="text-xl">
-                            <strong>ChatBlest: </strong>
-
-                            <span className="typing-indicator">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </span>
-                        </p>
+                {isScanning && (
+                    <div className='flex items-center gap-2 mt-4'>
+                        <strong className='text-2xl animate-spin'>...</strong>
+                        <p className='text-gray-700 text-xl'>Cargando...</p>
                     </div>
                 )}
             </div>
@@ -123,28 +155,30 @@ export default function CashTrackrAgent({ budgetId, name }: Props) {
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Consulta dudas sobre tu Presupuesto o Agrega Gastos"
                     className="w-full border border-gray-300 p-3 rounded-lg text-xl"
+                    disabled={isBusy}
                 />
                 <div className="flex gap-2">
                     <button
                         type="submit"
                         className="flex-1 mt-5 bg-purple-950 hover:bg-purple-800 p-3 rounded-lg text-white font-bold text-xl cursor-pointer disabled:opacity-20"
+                        disabled={isBusy || !input.trim()}
                     >
-                        Consultar
+                        {status == 'streaming' ? 'Pensando...' : 'Consultar'}
                     </button>
                     <button
                         type="button"
-                        onClick={() => fileInput.current?.click()}
+                        onClick={() => fileInputRef.current?.click()}
                         className="mt-5 bg-amber-500 hover:bg-amber-500 p-3 rounded-lg text-white font-bold text-xl cursor-pointer disabled:opacity-20"
                     >
-                        Subir Ticket
+                        {isScanning ? 'Subiendo imagen...' : 'Subir Ticket'}
                     </button>
                 </div>
                 <input
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    ref={fileInput}
-                    onChange={handleImage}
+                    ref={fileInputRef}
+                    onChange={handleImageUpload}
                 // ref={fileInput}
                 // onChange={(e) => {
                 //     const file = e.target.files?.[0];

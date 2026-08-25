@@ -1,5 +1,6 @@
 <?php
 
+use App\Ai\Tools\AddExpenses;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegistroController;
 use App\Http\Controllers\Auth\LoginController;
@@ -12,6 +13,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\PresupuestoController;
 use App\Http\Controllers\PresupuestoChatController;
+use App\Http\Controllers\AddTicketController;
 // use App\Http\Controllers\ExpenseController;
 
 
@@ -103,5 +105,5 @@ Route::prefix('dashboard')->group(function () {
 
 
     Route::post('/Presupuestos/{presupuesto}/chat', [PresupuestoChatController::class, 'store'])->name('Presupuestos.chat');
-    // Route::post('/Presupuestos/{presupuesto}/', [PresupuestoChatController::class, 'store'])->name('Presupuestos.chat');
+    Route::post('/Presupuestos/{presupuesto}/addimage', [AddTicketController::class, 'store'])->name('Presupuestos.addimage');
 });
