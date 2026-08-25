@@ -21,11 +21,11 @@
 </head>
 
 <body>
-    <header class="bg-purple-950 py-5 ">
-        <div class="max-w-6xl mx-auto flex flex-col items-center lg:flex-row lg:justify-between">
-            <div class="w-full max-w-100">
+    <header class="bg-slate-700 py-5 ">
+        <div class="max-w-6xl mx-auto flex flex-col items-center lg:flex-row lg:justify-center ">
+            <div class="w-full max-w-100 text-white">
                 <a href="">
-                    <img src="{{ asset('img/logo.svg') }}" alt="Imagen login de usuarios">
+                    <img src="{{ asset('img/logo1.svg') }}" alt="Imagen login de usuarios">
                 </a>
             </div>
             <nav class="flex flex-col items-center lg:flex-row gap-4 ">

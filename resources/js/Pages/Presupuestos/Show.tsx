@@ -11,6 +11,7 @@ import { useExpenseModalStore } from "@/stores/expense.modal";
 import { formatearCantidad, formatearFecha } from "@/utils";
 import ProgressBar from "@/components/ProgressBar";
 import ExpenseDropdown from "@/components/ExpenseDropwn";
+import DeleteExpenseModal from "@/components/DeleteExponsModal";
 
 type Props = {
     presupuesto: Presupuesto;
@@ -51,18 +52,18 @@ export default function Show({ presupuesto, categories, spent }: Props) {
     return (
         <>
             <Head title={`Presupuesto: ${presupuesto.name}`} />
-            <div className="min-h-screen bg-gray-50 px-4 py-6 sm:px-6 lg:px-8">
+            <div className="min-h-screen bg-gray-50 px-4 py-6 sm:px-6 lg:px-8 card">
                 <div className="mx-auto max-w-7xl">
                     <section className="mb-8">
                         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                             <div>
-                                <p className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+                                <p className="text-sm font-semibold uppercase tracking-wide text-gray-400">
                                     Nombre del presupuesto
                                 </p>
-                                <h1 className="mt-1 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                                <h1 className="mt-1 text-3xl font-bold tracking-tight  sm:text-4xl">
                                     {presupuesto.name}
                                 </h1>
-                                <p className="mt-2 max-w-2xl text-sm text-gray-500 sm:text-base">
+                                <p className="mt-2 max-w-2xl text-sm text-gray-400 sm:text-base">
                                     Administra tu presupuesto, controla tus gastos
                                     y revisa cuánto dinero tienes disponible.
                                 </p>
@@ -99,13 +100,13 @@ export default function Show({ presupuesto, categories, spent }: Props) {
                     </main>
 
                     {/* GASTOS */}
-                    <section className="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-200">
+                    <section className="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-200 card">
 
                         {/* HEADER DE GASTOS */}
-                        <div className="flex flex-col gap-4 border-b border-gray-200 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+                        <div className="flex flex-col gap-4 border-b border-gray-200 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6 ">
 
                             <div>
-                                <h2 className="text-xl font-bold text-gray-900">
+                                <h2 className="text-xl font-bold text">
                                     Gastos
                                 </h2>
 
@@ -125,8 +126,8 @@ export default function Show({ presupuesto, categories, spent }: Props) {
                         </div>
                         {presupuesto.expenses?.length ? (
                             <>
-                                <div className="p-5 sm:p-6">
-                                    <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-10 ">
+                                <div className="p-5 sm:p-6 card">
+                                    <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-10 card">
                                         <table className="relative min-w-full">
                                             <thead>
                                                 <tr>
@@ -217,6 +218,7 @@ export default function Show({ presupuesto, categories, spent }: Props) {
 
             <ExpenseModal />
             <ToastContainer />
+            <DeleteExpenseModal />
         </>
     );
 }

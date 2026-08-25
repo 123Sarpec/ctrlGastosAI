@@ -32,27 +32,27 @@ export default function ExpensForm() {
                     closeModal()
                 }
             });
+        } else {
+            post(route('expenses.store', presupuesto.id),
+                {
+                    onSuccess: () => {
+                        reset()
+                        closeModal()
+                    }
+                });
         }
-
-        post(route('expenses.store', presupuesto.id),
-            {
-                onSuccess: () => {
-                    reset()
-                    closeModal()
-                }
-            });
     }
 
 
     return (
         <>
-            <DialogTitle as="h3" className="text-4xl font-black mt-10 text-center">
+            <DialogTitle as="h3" className="text-4xl font-black mt-10 text-center card">
                 {isEditing ? 'Editar Gasto' : 'Nuevo Gasto'}
             </DialogTitle>
-            <div className='p-10 flex justify-center'>
-                <form onSubmit={submit} className='flex flex-col space-y-3 w-full'>
+            <div className='p-10 flex justify-center card'>
+                <form onSubmit={submit} className='flex flex-col space-y-3 w-full card'>
 
-                    <div className='space-y-3'>
+                    <div className='space-y-3 card'>
                         <label htmlFor="name" className='block text-xl font-bold'>Nombre Gasto</label>
                         <input
                             id="name"
@@ -71,7 +71,7 @@ export default function ExpensForm() {
                             </InputError>
                         )}
                     </div>
-                    <div className='space-y-3'>
+                    <div className='space-y-3 card'>
                         <label htmlFor="amount" className='block text-xl font-bold'>Cantidad Gasto</label>
                         <input
                             id='amount'
@@ -86,12 +86,12 @@ export default function ExpensForm() {
                     </div>
 
                     {presupuesto.type === 'general' && (
-                        <div className='space-y-3'>
+                        <div className='space-y-3 card'>
                             <label htmlFor="category" className='block text-xl font-bold'>Categoría Gasto</label>
                             <select
                                 name="category"
                                 id="category"
-                                className='w-full border border-gray-300 p-3 rounded-lg text-black'
+                                className='w-full border border-gray-300 p-3 rounded-lg '
                                 value={data.category}
                                 onChange={(e) => setData("category", e.target.value)}
                             >

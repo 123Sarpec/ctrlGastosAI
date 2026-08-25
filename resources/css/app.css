@@ -2,6 +2,8 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@import "tailwindcss";
+
 
 @theme {
     --font-sans: "Roboto", sans-serif;
@@ -10,3 +12,31 @@
 /* @import "tailwindcss"; */
 
 @custom-variant dark (&:where(.dark, .dark *));
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #111827;
+        color: white;
+    }
+
+    .card {
+        background-color: #1f2937;
+        color: white;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: white;
+        color: #111827;
+    }
+
+    .card {
+        background-color: #f9fafb;
+        color: #111827;
+    }
+
+    .text {
+        background-color: #f9fafb;
+        color: #111827;
+    }
+}

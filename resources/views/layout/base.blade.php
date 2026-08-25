@@ -5,12 +5,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <title>{{ config('app.name', 'WblestCtrlGastos') }} - @yield('titulo')</title>
 
     @fonts
+
 
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -2170,15 +2173,15 @@
 
 <body>
 
-    <header class="bg-sky-800 py-5">
-        <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center lg:justify-between">
+    <header class="bg-slate-700 py-5">
+        <div class="max-w-6xl mx-auto flex flex-col lg:flex-row  lg:justify-center">
             <div class="w-full max-w-100">
-                <img src="{{ asset('img/logo_portada.svg') }}" alt="logo" class="w-full block" />
+                <img src="{{ asset('img/logo1.svg') }}" alt="logo" class="w-full block" />
             </div>
             <nav class="flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0">
 
                 @auth
-                <p class="text-white text-xl"> Hola: - {{ auth()->user()->name}} - </p>
+                <p class=" text-xl"> Hola: - {{ auth()->user()->name}} - </p>
                 <x-dropdown-menu />
                 @else
                 @if (Route::has('login'))
