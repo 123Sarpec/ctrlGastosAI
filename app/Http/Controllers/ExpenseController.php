@@ -7,6 +7,7 @@ use App\Models\Expense;
 use App\Models\Presupuesto;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
+use Illuminate\Support\Facades\Gate;
 
 class ExpenseController extends Controller
 {

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\PresupuestoController;
+use App\Http\Controllers\PresupuestoChatController;
 // use App\Http\Controllers\ExpenseController;
 
 
@@ -98,4 +99,9 @@ Route::prefix('dashboard')->group(function () {
     Route::post('/Presupuestos/{presupuesto}/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
     Route::put('/Presupuestos/{presupuesto}/expenses/{expense}', [ExpenseController::class, 'update'])->name('expenses.update');
     Route::delete('/Presupuestos/{presupuesto}/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
+
+
+
+    Route::post('/Presupuestos/{presupuesto}/chat', [PresupuestoChatController::class, 'store'])->name('Presupuestos.chat');
+    // Route::post('/Presupuestos/{presupuesto}/', [PresupuestoChatController::class, 'store'])->name('Presupuestos.chat');
 });

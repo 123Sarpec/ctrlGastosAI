@@ -49,7 +49,7 @@ class PresupuestoController extends Controller
     {
 
         $presupuesto = Auth::user()->presupuestos()->create($request->validated());
-        return redirect()->route('dashboard')->with('success', 'Presupuesto creado correctamente.');
+        return redirect()->route('Presupuestos.show', $presupuesto)->with('success', 'Presupuesto creado correctamente.');
     }
 
     /**
@@ -98,7 +98,7 @@ class PresupuestoController extends Controller
     public function update(PresupuestoRequest $request, Presupuesto $presupuesto)
     {
         $presupuesto->update($request->validated());
-        return redirect()->route('dashboard')->with('success', 'Presupuesto actualizado correctamente.');
+        return redirect()->route('Presupuestos.show', $presupuesto)->with('success', 'Presupuesto actualizado correctamente.');
     }
 
     /**
@@ -107,7 +107,8 @@ class PresupuestoController extends Controller
     #[Authorize('delete', 'presupuesto')]
     public function destroy(Presupuesto $presupuesto)
     {
-        $presupuesto->delete();
+        // $presupuesto->delete();
+        Presupuesto::destroy($presupuesto->id);
         return redirect()->route('dashboard')->with('success', 'Presupuesto eliminado correctamente.');
     }
 }

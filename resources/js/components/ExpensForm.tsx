@@ -91,7 +91,7 @@ export default function ExpensForm() {
                             <select
                                 name="category"
                                 id="category"
-                                className='w-full border border-gray-300 p-3 rounded-lg '
+                                className='w-full border border-gray-300 p-3 rounded-lg  card'
                                 value={data.category}
                                 onChange={(e) => setData("category", e.target.value)}
                             >

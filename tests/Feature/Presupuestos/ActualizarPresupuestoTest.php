@@ -22,7 +22,7 @@ it('allows the owner to update a budget', function () {
         'amount' => 1500,
         'type' => 'goal',
     ]);
-    $response->assertRedirect(route('dashboard'));
+    $response->assertRedirect(route('Presupuestos.show', $presupuesto));
     $response->assertSessionHas('success', 'Presupuesto actualizado correctamente.');
     $this->assertDatabaseHas('presupuestos', [
         'id' => $presupuesto->id,

@@ -1,5 +1,5 @@
 @props([
-    'presupuesto' => null
+'presupuesto' => null
 ])
 
 <div class="flex flex-col gap-2">
@@ -14,12 +14,11 @@
         name="name"
         placeholder="Nombre del Presupuesto. Ej. Boda, Casa, Graduación, Semana"
         class="w-full border border-gray-300 p-3 rounded-lg"
-        value="{{ old('name', $presupuesto?->name) }}"
-    >
+        value="{{ old('name', $presupuesto?->name) }}">
     @error('name')
-        <p class="text-red-500 text-sm font-semibold">
-            {{ $message }}
-        </p>
+    <p class="text-red-500 text-sm font-semibold">
+        {{ $message }}
+    </p>
     @enderror
 </div>
 
@@ -36,13 +35,12 @@
         step="0.01"
         placeholder="Cantidad del Presupuesto"
         class="w-full border border-gray-300 p-3 rounded-lg"
-        value="{{ old('amount', $presupuesto?->amount) }}"
-    >
+        value="{{ old('amount', $presupuesto?->amount) }}">
 
     @error('amount')
-        <p class="text-red-500 text-sm font-semibold">
-            {{ $message }}
-        </p>
+    <p class="text-red-500 text-sm font-semibold">
+        {{ $message }}
+    </p>
     @enderror
 </div>
 
@@ -78,25 +76,25 @@
         </div>
     </div>
 
-<select
-    id="type"
-    name="type"
-    class="w-full border border-gray-300 p-3 rounded-lg">
-    <option value="">Seleccione un tipo</option>
-    <option
-        value="general"
-        {{ old('type', $presupuesto?->type?->value ?? $presupuesto?->type) == 'general' ? 'selected' : '' }}>
-        General - Con Categorías
-    </option>
-    <option
-        value="goal"
-        {{ old('type', $presupuesto?->type?->value ?? $presupuesto?->type) == 'goal' ? 'selected' : '' }}>
-        Proyecto
-    </option>
-</select>
+    <select
+        id="type"
+        name="type"
+        class="w-full border border-gray-300 p-3 rounded-lg card">
+        <option value="">Seleccione un tipo</option>
+        <option
+            value="general"
+            {{ old('type', $presupuesto?->type?->value ?? $presupuesto?->type) == 'general' ? 'selected' : '' }}>
+            General - Con Categorías
+        </option>
+        <option
+            value="goal"
+            {{ old('type', $presupuesto?->type?->value ?? $presupuesto?->type) == 'goal' ? 'selected' : '' }}>
+            Proyecto
+        </option>
+    </select>
     @error('type')
-        <p class="text-red-500 text-sm font-semibold">
-            {{ $message }}
-        </p>
+    <p class="text-red-500 text-sm font-semibold">
+        {{ $message }}
+    </p>
     @enderror
 </div>

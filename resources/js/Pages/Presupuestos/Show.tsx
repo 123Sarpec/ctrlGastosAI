@@ -12,6 +12,7 @@ import { formatearCantidad, formatearFecha } from "@/utils";
 import ProgressBar from "@/components/ProgressBar";
 import ExpenseDropdown from "@/components/ExpenseDropwn";
 import DeleteExpenseModal from "@/components/DeleteExponsModal";
+import ControgastoAi from "@/components/ControgastoAi";
 
 type Props = {
     presupuesto: Presupuesto;
@@ -23,7 +24,7 @@ export default function Show({ presupuesto, categories, spent }: Props) {
 
     const openModal = useExpenseModalStore((state) => state.openModal);
 
-    const { flash } = usePage().props;
+    const { flash, user } = usePage().props;
     /*mensaje de exito*/
     useEffect(() => {
         if (flash.success) {
@@ -127,76 +128,74 @@ export default function Show({ presupuesto, categories, spent }: Props) {
                         {presupuesto.expenses?.length ? (
                             <>
                                 <div className="p-5 sm:p-6 card">
-                                    <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-10 card">
-                                        <table className="relative min-w-full">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">
-                                                        <span className="sr-only">
-                                                            Gastos
-                                                        </span>
-                                                    </th>
-                                                    <th scope="col">
-                                                        <span className="sr-only">
-                                                            Acciones
-                                                        </span>
-                                                    </th>
-                                                </tr>
-                                            </thead>
+                                    <table className="relative min-w-full">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">
+                                                    <span className="sr-only">
+                                                        Gastos
+                                                    </span>
+                                                </th>
+                                                <th scope="col">
+                                                    <span className="sr-only">
+                                                        Acciones
+                                                    </span>
+                                                </th>
+                                            </tr>
+                                        </thead>
 
-                                            <tbody className="divide-y divide-gray-300 ">
-                                                {presupuesto.expenses.map((expense) => (
-                                                    <tr key={expense.id} className="flex items-center justify-between">
+                                        <tbody className="divide-y divide-gray-300 ">
+                                            {presupuesto.expenses.map((expense) => (
+                                                <tr key={expense.id} className="flex items-center justify-between">
 
-                                                        <td className="relative px-10 pb-5 gap-2">
-                                                            {presupuesto.type === 'general' && (
-                                                                <p className={`text-sm text-gray-900 border-b rounded-2xl text-center ${expense.category_color}`}>
-                                                                    {expense.category_label}
-                                                                </p>
-                                                            )}
-
-                                                            <p className="text-xl font-bold text-gray-500">
-                                                                {expense.name}
+                                                    <td className="relative px-10 pb-5 gap-2">
+                                                        {presupuesto.type === 'general' && (
+                                                            <p className={`text-sm text-gray-900 border-b rounded-2xl text-center ${expense.category_color}`}>
+                                                                {expense.category_label}
                                                             </p>
-                                                            <p className="text-lg text-gray-500">
-                                                                {formatearCantidad(expense.amount)}
-                                                            </p>
-                                                            <p className="text-sm text-gray-400"> Agregado el: {formatearFecha(expense.created_at)}</p>
-                                                        </td>
-
-                                                        <td className="flex justify-end gap-3 px-10 py-6">
-                                                            <ExpenseDropdown expense={expense} />
-                                                        </td>
-                                                    </tr>
-                                                ))}
-
-                                                <tr className="flex items-center justify-between">
-
-                                                    <td className="relative px-10 pb-5">
-
-                                                        <p className="absolute left-0 top-0 inline-block w-40 rounded-br-2xl px-3 py-1 text-sm font-medium">
-                                                            Categoría
-                                                        </p>
+                                                        )}
 
                                                         <p className="text-xl font-bold text-gray-500">
+                                                            {expense.name}
                                                         </p>
-
                                                         <p className="text-lg text-gray-500">
+                                                            {formatearCantidad(expense.amount)}
                                                         </p>
-
-                                                        <p className="text-sm text-gray-400">
-                                                        </p>
-
+                                                        <p className="text-sm text-gray-400"> Agregado el: {formatearFecha(expense.created_at)}</p>
                                                     </td>
 
                                                     <td className="flex justify-end gap-3 px-10 py-6">
+                                                        <ExpenseDropdown expense={expense} />
                                                     </td>
-
                                                 </tr>
-                                            </tbody>
-                                        </table>
+                                            ))}
 
-                                    </div>
+                                            <tr className="flex items-center justify-between">
+
+                                                <td className="relative px-10 pb-5">
+
+                                                    <p className="absolute left-0 top-0 inline-block w-40 rounded-br-2xl px-3 py-1 text-sm font-medium">
+                                                        Categoría
+                                                    </p>
+
+                                                    <p className="text-xl font-bold text-gray-500">
+                                                    </p>
+
+                                                    <p className="text-lg text-gray-500">
+                                                    </p>
+
+                                                    <p className="text-sm text-gray-400">
+                                                    </p>
+
+                                                </td>
+
+                                                <td className="flex justify-end gap-3 px-10 py-6">
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
                                 </div>
                             </>
                         ) : (
@@ -215,10 +214,10 @@ export default function Show({ presupuesto, categories, spent }: Props) {
                     </section>
                 </div>
             </div>
-
             <ExpenseModal />
             <ToastContainer />
             <DeleteExpenseModal />
+            <ControgastoAi budgetId={presupuesto.id} name={user.name} />
         </>
     );
 }

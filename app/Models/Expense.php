@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Presupuesto;
 use App\ExpenseCategoria;
 
-#[Fillable(['name', 'amount', 'category', 'budget_id'])]
+#[Fillable(['name', 'amount', 'category', 'presupuesto_id'])]
 class Expense extends Model
 {
     use SoftDeletes;
