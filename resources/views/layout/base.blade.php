@@ -2178,10 +2178,13 @@
             <div class="w-full max-w-100">
                 <img src="{{ asset('img/logo1.svg') }}" alt="logo" class="w-full block" />
             </div>
-            <nav class="flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0">
+            <nav class="flex text-white flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0">
 
                 @auth
+                <x-suscription-badge />
+
                 <p class=" text-xl"> Hola: - {{ auth()->user()->name}} - </p>
+
                 <x-dropdown-menu />
                 @else
                 @if (Route::has('login'))

@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\PresupuestoController;
 use App\Http\Controllers\PresupuestoChatController;
 use App\Http\Controllers\AddTicketController;
+use Inertia\Inertia;
+
 // use App\Http\Controllers\ExpenseController;
 
 
@@ -107,3 +109,29 @@ Route::prefix('dashboard')->group(function () {
     Route::post('/Presupuestos/{presupuesto}/chat', [PresupuestoChatController::class, 'store'])->name('Presupuestos.chat');
     Route::post('/Presupuestos/{presupuesto}/addimage', [AddTicketController::class, 'store'])->name('Presupuestos.addimage');
 });
+
+
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::post('/subscription.checkout/{plan}', function (Request $request, string $plan) {
+        $prices = [
+            'monthly' => config('services.stripe.price_monthly'),
+            'yearly' => config('services.stripe.price_yearly'),
+        ];
+        abort_unless(isset($prices[$plan]), 400, 'plan no valida');
+        $checkout = $request->user()
+            ->newSubscription('default', $prices[$plan])
+            ->allowPromotionCodes()
+            ->checkout([
+                'success_url' => route('billing.success'),
+                'cancel_url' => route('billing.cancel'),
+            ]);
+        return Inertia::location($checkout->url, 303);
+    })->name('subscription.checkout')->whereIn('plan', ['monthly', 'yearly']);
+
+    Route::view('/billing/success', 'billing.success')->name('billing.success');
+    Route::view('/billing/cancel', 'billing.cancel')->name('billing.cancel');
+});
+Route::get('/plans', function () {
+    return Inertia::render('Proo/Plans');
+})->name('plans');

@@ -13,6 +13,7 @@ import ProgressBar from "@/components/ProgressBar";
 import ExpenseDropdown from "@/components/ExpenseDropwn";
 import DeleteExpenseModal from "@/components/DeleteExponsModal";
 import ControgastoAi from "@/components/ControgastoAi";
+import PrecioTable from "@/components/PrecioTable";
 
 type Props = {
     presupuesto: Presupuesto;
@@ -25,6 +26,8 @@ export default function Show({ presupuesto, categories, spent }: Props) {
     const openModal = useExpenseModalStore((state) => state.openModal);
 
     const { flash, user } = usePage().props;
+
+    console.log(user);
     /*mensaje de exito*/
     useEffect(() => {
         if (flash.success) {
@@ -212,12 +215,23 @@ export default function Show({ presupuesto, categories, spent }: Props) {
                         )}
 
                     </section>
+
                 </div>
             </div>
+            {user.subscription ? (
+                <ControgastoAi budgetId={presupuesto.id} name={user.user.name} />
+
+            ) : (
+                <div className='mt-10'>
+                    <PrecioTable />
+                </div>
+            )
+            }
+
+
             <ExpenseModal />
             <ToastContainer />
             <DeleteExpenseModal />
-            <ControgastoAi budgetId={presupuesto.id} name={user.name} />
         </>
     );
 }
