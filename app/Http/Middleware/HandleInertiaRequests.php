@@ -35,23 +35,57 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-
         $user = $request->user();
-        $suscribed = $user?->subscribed('default') ?? false;
+
+        if (!$user) {
+            return [
+                ...parent::share($request),
+
+                'flash' => [
+                    'success' => fn() => $request->session()->get('success'),
+                    'error' => fn() => $request->session()->get('error'),
+                ],
+
+                'user' => null,
+            ];
+        }
+
+        $subscribed = $user?->subscribed('default') ?? false;
+
+        $plan = null;
+
+        if ($subscribed) {
+            $plan = match (true) {
+                $user->subscribedToPrice(
+                    config('services.stripe.price_yearly'),
+                    'default'
+                ) => 'yearly',
+
+                $user->subscribedToPrice(
+                    config('services.stripe.price_monthly'),
+                    'default'
+                ) => 'monthly',
+
+                default => null,
+            };
+        }
 
         return [
             ...parent::share($request),
+
             'flash' => [
-                'success' => fn() => $request->session()->get('success')
+                'success' => fn() => $request->session()->get('success'),
+                'error' => fn() => $request->session()->get('error'),
             ],
+
             'user' => [
-                'user' => $user,
-                'subscription' => $suscribed,
-                'plan' => $suscribed ? ($user->subscribedToPrice(config('services.stripe.price_yearly'), 'default')
-                    ? 'yearly'
-                    : 'monthly'
-                )
-                    : null,
+                'user' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    // 'avatar' => $user->avatar,
+                ],
+                'subscription' => $subscribed,
+                'plan' => $plan,
             ],
         ];
     }

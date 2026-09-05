@@ -45,9 +45,9 @@ class PresupuestoChatController extends Controller
                 $prompt,
                 provider: 'openrouter',
                 // model: 'poolside/laguna-xs-2.1:free'
-                // model: 'nvidia/nemotron-3-super-120b-a12b:free'
+                model: 'nvidia/nemotron-3-super-120b-a12b:free'
                 // model: 'google/gemma-4-31b-it:free'
-                model: 'stealth/ox-alpha'
+                // model: 'stealth/ox-alpha'
             )->usingVercelDataProtocol();
     }
 }

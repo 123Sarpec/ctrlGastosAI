@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 import { Presupuesto } from "@/types/presupuestos";
 import { Category } from "@/types/category";
-import { ToastContainer, toast } from "react-toastify";
 
 import AmountDisplay from "@/components/MontoDisponible";
 import ExpenseModal from "@/components/ExpenseModal";
@@ -14,6 +13,7 @@ import ExpenseDropdown from "@/components/ExpenseDropwn";
 import DeleteExpenseModal from "@/components/DeleteExponsModal";
 import ControgastoAi from "@/components/ControgastoAi";
 import PrecioTable from "@/components/PrecioTable";
+import AppLayout from "@/layouts/AppLayout";
 
 type Props = {
     presupuesto: Presupuesto;
@@ -25,15 +25,9 @@ export default function Show({ presupuesto, categories, spent }: Props) {
 
     const openModal = useExpenseModalStore((state) => state.openModal);
 
-    const { flash, user } = usePage().props;
+    const { user } = usePage().props;
 
-    console.log(user);
-    /*mensaje de exito*/
-    useEffect(() => {
-        if (flash.success) {
-            toast.success(flash.success);
-        }
-    }, [flash]);
+
 
     /*para que el modal tenga la informacion del presupuesto y las categorias*/
     useEffect(() => {
@@ -54,8 +48,8 @@ export default function Show({ presupuesto, categories, spent }: Props) {
     }, [porcentajeUsed]);
 
     return (
-        <>
-            <Head title={`Presupuesto: ${presupuesto.name}`} />
+        < AppLayout title={`Pre || ${presupuesto.name}`} >
+            {/* <Head title={`Presupuesto: ${presupuesto.name}`} /> */}
             <div className="min-h-screen bg-gray-50 px-4 py-6 sm:px-6 lg:px-8 card">
                 <div className="mx-auto max-w-7xl">
                     <section className="mb-8">
@@ -230,8 +224,7 @@ export default function Show({ presupuesto, categories, spent }: Props) {
 
 
             <ExpenseModal />
-            <ToastContainer />
             <DeleteExpenseModal />
-        </>
+        </AppLayout>
     );
 }

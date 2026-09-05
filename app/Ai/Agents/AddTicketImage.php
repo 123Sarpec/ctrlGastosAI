@@ -33,17 +33,20 @@ class AddTicketImage implements Agent, HasStructuredOutput
     public function schema(JsonSchema $schema): array
     {
         return [
-            'store' => $schema->string(),
-            'category' => $schema->string()->enum(ExpenseCategoria::cases())->required(),
+            'store' => $schema->string()->required(),
+
+            'category' => $schema->string()
+                ->enum(array_column(ExpenseCategoria::cases(), 'value'))
+                ->required(),
+
             'items' => $schema->array()
                 ->items(
                     $schema->object(fn($schema) => [
                         'name' => $schema->string()->required(),
                         'amount' => $schema->number()->required(),
-
                     ])
-
-                )->required()
+                )
+                ->required(),
         ];
     }
 }

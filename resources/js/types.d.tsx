@@ -5,10 +5,10 @@ declare module '@inertiajs/core' {
         sharedPageProps: {
             flash: {
                 success?: string,
+                error?: string,
             },
             user: {
                 user: {
-                    id: number;
                     name: string;
                     email: string;
                 },

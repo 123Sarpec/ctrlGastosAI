@@ -2176,7 +2176,9 @@
     <header class="bg-slate-700 py-5">
         <div class="max-w-6xl mx-auto flex flex-col lg:flex-row  lg:justify-center">
             <div class="w-full max-w-100">
-                <img src="{{ asset('img/logo1.svg') }}" alt="logo" class="w-full block" />
+                <a href="{{ route('Home') }}">
+                    <img src="{{ asset('img/logo1.svg') }}" alt="logo" class="w-full block" />
+                </a>
             </div>
             <nav class="flex text-white flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0">
 

@@ -14,14 +14,20 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\PresupuestoController;
 use App\Http\Controllers\PresupuestoChatController;
 use App\Http\Controllers\AddTicketController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\SuscripcionChekout;
+use App\Http\Controllers\SuscripcionController;
+use App\Http\Controllers\UpdatePasswordController;
+use App\Http\Controllers\UpdateProfileController;
 use Inertia\Inertia;
 
 // use App\Http\Controllers\ExpenseController;
 
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('home');
+})->name('Home');
 
 
 Route::get('/auth/registro', [RegistroController::class, 'index'])->name('registro');
@@ -34,6 +40,13 @@ Route::post('/auth/login', [LoginController::class, 'store'])->name('login.store
 
 /*cerrar sesion*/
 Route::post('/auth/logout', [CerraSesionController::class, 'store'])->name('logout.store');
+
+/*olvida contrase;a*/
+Route::get('/auth/forgot-password', [ForgotPasswordController::class, 'index'])->name('password.request');
+Route::post('/auth/forgot-password', [ForgotPasswordController::class, 'store'])->name('password.email');
+Route::get('/auth/reset-password/{token}', [ResetPasswordController::class, 'index'])->name('password.reset');
+Route::post('/auth/reset-password', [ResetPasswordController::class, 'store'])->name('password.update');
+
 
 // Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
 //      $request->fulfill();
@@ -104,30 +117,27 @@ Route::prefix('dashboard')->group(function () {
     Route::put('/Presupuestos/{presupuesto}/expenses/{expense}', [ExpenseController::class, 'update'])->name('expenses.update');
     Route::delete('/Presupuestos/{presupuesto}/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
 
+    // Route::post('/Presupuestos/{presupuesto}/chat', [PresupuestoChatController::class, 'store'])->name('Presupuestos.chat');
+    // Route::post('/Presupuestos/{presupuesto}/addimage', [AddTicketController::class, 'store'])->name('Presupuestos.addimage');
+
+    Route::get('/settings/profile', [UpdateProfileController::class, 'edit'])->name('settings.profile');
+    Route::put('/settings/profile', [UpdateProfileController::class, 'update'])->name('settings.profile.update');
+    Route::get('/settings/password', [UpdatePasswordController::class, 'edit'])->name('settings.password');
+    Route::put('/settings/password', [UpdatePasswordController::class, 'update'])->name('settings.password.update');
 
 
-    Route::post('/Presupuestos/{presupuesto}/chat', [PresupuestoChatController::class, 'store'])->name('Presupuestos.chat');
-    Route::post('/Presupuestos/{presupuesto}/addimage', [AddTicketController::class, 'store'])->name('Presupuestos.addimage');
+
+    Route::middleware(['auth', 'verified', 'suscribed'])->group(function () {
+        Route::post('/Presupuestos/{presupuesto}/chat', [PresupuestoChatController::class, 'store'])->name('Presupuestos.chat');
+        Route::post('/Presupuestos/{presupuesto}/addimage', [AddTicketController::class, 'store'])->name('Presupuestos.addimage');
+    });
 });
+
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::post('/subscription.checkout/{plan}', function (Request $request, string $plan) {
-        $prices = [
-            'monthly' => config('services.stripe.price_monthly'),
-            'yearly' => config('services.stripe.price_yearly'),
-        ];
-        abort_unless(isset($prices[$plan]), 400, 'plan no valida');
-        $checkout = $request->user()
-            ->newSubscription('default', $prices[$plan])
-            ->allowPromotionCodes()
-            ->checkout([
-                'success_url' => route('billing.success'),
-                'cancel_url' => route('billing.cancel'),
-            ]);
-        return Inertia::location($checkout->url, 303);
-    })->name('subscription.checkout')->whereIn('plan', ['monthly', 'yearly']);
+    Route::post('/subscription.checkout/{plan}', [SuscripcionChekout::class, 'store'])->name('subscription.checkout')->whereIn('plan', ['monthly', 'yearly']);
 
     Route::view('/billing/success', 'billing.success')->name('billing.success');
     Route::view('/billing/cancel', 'billing.cancel')->name('billing.cancel');
@@ -135,3 +145,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/plans', function () {
     return Inertia::render('Proo/Plans');
 })->name('plans');
+
+
+
+Route::get('/subscription', [SuscripcionController::class, 'show'])
+    ->name('subscription.manage');
+
+Route::post('/subscription/swap/{plan}', [SuscripcionController::class, 'swap'])
+    ->name('subscription.swap')
+    ->whereIn('plan', ['monthly', 'yearly']);
+
+Route::post('/subscription/cancel', [SuscripcionController::class, 'cancel'])
+    ->name('subscription.cancel');
+
+Route::post('/subscription/resume', [SuscripcionController::class, 'resume'])
+    ->name('subscription.resume');
+
+Route::get('/billing', function (Request $request) {
+    return $request->user()->redirectToBillingPortal(route('dashboard'));
+})->name('billing');

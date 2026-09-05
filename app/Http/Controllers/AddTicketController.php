@@ -35,8 +35,12 @@ class AddTicketController extends Controller
         );
     }
 
-    private function createExpenses(Presupuesto $presupuesto, string $store, string $category, array $items): array
-    {
+    private function createExpenses(
+        Presupuesto $presupuesto,
+        string $store,
+        string $category,
+        array $items
+    ): array {
         $created = [];
 
         foreach ($items as $item) {
@@ -44,10 +48,13 @@ class AddTicketController extends Controller
                 'presupuesto_id' => $presupuesto->id,
                 'name' => $store . ' - ' . $item['name'],
                 'amount' => $item['amount'],
-                'category' => $presupuesto->isGeneral() ? $category : null,
+                'category' => $category,
             ]);
 
-            $cat = $expense->category ? $expense->category->label() : 'Sin categoría';
+            $cat = $expense->category
+                ? $expense->category->label()
+                : 'Sin categoría';
+
             $created[] = "- {$expense->name}: \${$expense->amount} ({$cat})";
         }
 
