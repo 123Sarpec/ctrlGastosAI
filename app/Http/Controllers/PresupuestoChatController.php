@@ -43,11 +43,12 @@ class PresupuestoChatController extends Controller
         return $agent
             ->stream(
                 $prompt,
-                provider: 'openrouter',
-                // model: 'poolside/laguna-xs-2.1:free'
-                model: 'nvidia/nemotron-3-super-120b-a12b:free'
-                // model: 'google/gemma-4-31b-it:free'
-                // model: 'stealth/ox-alpha'
+                provider: [
+                    'groq' => 'openai/gpt-oss-20b',
+                    'gemini' => 'gemini-3.1-flash-lite-preview',
+                    'openrouter' => 'nvidia/nemotron-3.5-lightning:free',
+                ],
+
             )->usingVercelDataProtocol();
     }
 }

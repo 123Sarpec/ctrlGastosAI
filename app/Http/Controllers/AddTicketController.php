@@ -20,8 +20,12 @@ class AddTicketController extends Controller
         $response = (new AddTicketImage)->prompt(
             'Analiza la imagen del ticket y extrae la información de los productos.',
             attachments: [Files\Image::fromUpload($request->file('image'))],
-            provider: 'gemini',
-            model: 'gemini-3-flash-preview',
+            provider: [
+                'gemini' => 'gemini-3-flash-preview',
+                'groq' => 'qwen/qwen3.6-27b',
+                'openrouter' => 'qwen/qwen3.8-27b',
+            ],
+
             timeout: 120
         );
         if (empty($response['items'])) {

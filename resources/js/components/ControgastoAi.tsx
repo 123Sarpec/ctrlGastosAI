@@ -124,7 +124,7 @@ export default function CashTrackrAgent({ budgetId, name }: Props) {
                             return (
                                 <p className="text-xl" key={i}>
                                     <strong>
-                                        {m.role === 'user' ? name + ': ' : 'ChatBlest: '}
+                                        {m.role === 'user' ? name + ': ' : 'Asistente: '}
                                     </strong>
                                     {text.replace('[EXPENSE_CREATED]', '').trim()}
                                 </p>
@@ -135,7 +135,16 @@ export default function CashTrackrAgent({ budgetId, name }: Props) {
                 {isScanning && (
                     <div className='flex items-center gap-2 mt-4'>
                         <strong className='text-2xl animate-spin'>...</strong>
-                        <p className='text-gray-700 text-xl'>Cargando...</p>
+                        <p className='text-gray-700 text-xl'>Analizando imagen...</p>
+                    </div>
+                )}
+                {(status === 'submitted' || status === 'streaming') && !isScanning && (
+                    <div className="flex items-center gap-2 mt-4">
+                        <strong className='text-2xl animate-spin'>...</strong>
+                        <span className="text-gray-600">
+                            Analizando datos...
+                        </span>
+
                     </div>
                 )}
             </div>
