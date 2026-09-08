@@ -127,40 +127,42 @@ Route::prefix('dashboard')->group(function () {
 
 
 
-    Route::middleware(['auth', 'verified', 'suscribed'])->group(function () {
-        Route::post('/Presupuestos/{presupuesto}/chat', [PresupuestoChatController::class, 'store'])->name('Presupuestos.chat');
-        Route::post('/Presupuestos/{presupuesto}/addimage', [AddTicketController::class, 'store'])->name('Presupuestos.addimage');
-    });
+    // Route::middleware(['auth', 'verified', 'suscribed'])->group(function () {
+    Route::post('/Presupuestos/{presupuesto}/chat', [PresupuestoChatController::class, 'store'])->name('Presupuestos.chat');
+    Route::post('/Presupuestos/{presupuesto}/addimage', [AddTicketController::class, 'store'])->name('Presupuestos.addimage');
+    // });
 });
 
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+// Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::post('/subscription.checkout/{plan}', [SuscripcionChekout::class, 'store'])->name('subscription.checkout')->whereIn('plan', ['monthly', 'yearly']);
+// Route::post('/subscription.checkout/{plan}', [SuscripcionChekout::class, 'store'])->name('subscription.checkout')->whereIn('plan', ['monthly', 'yearly']);
 
-    Route::view('/billing/success', 'billing.success')->name('billing.success');
-    Route::view('/billing/cancel', 'billing.cancel')->name('billing.cancel');
-});
-Route::get('/plans', function () {
-    return Inertia::render('Proo/Plans');
-})->name('plans');
+// Route::view('/billing/success', 'billing.success')->name('billing.success');
+// Route::view('/billing/cancel', 'billing.cancel')->name('billing.cancel');
+// // });
 
 
+// Route::get('/plans', function () {
+//     return Inertia::render('Proo/Plans');
+// })->name('plans');
 
-Route::get('/subscription', [SuscripcionController::class, 'show'])
-    ->name('subscription.manage');
 
-Route::post('/subscription/swap/{plan}', [SuscripcionController::class, 'swap'])
-    ->name('subscription.swap')
-    ->whereIn('plan', ['monthly', 'yearly']);
 
-Route::post('/subscription/cancel', [SuscripcionController::class, 'cancel'])
-    ->name('subscription.cancel');
+// Route::get('/subscription', [SuscripcionController::class, 'show'])
+//     ->name('subscription.manage');
 
-Route::post('/subscription/resume', [SuscripcionController::class, 'resume'])
-    ->name('subscription.resume');
+// Route::post('/subscription/swap/{plan}', [SuscripcionController::class, 'swap'])
+//     ->name('subscription.swap')
+//     ->whereIn('plan', ['monthly', 'yearly']);
 
-Route::get('/billing', function (Request $request) {
-    return $request->user()->redirectToBillingPortal(route('dashboard'));
-})->name('billing');
+// Route::post('/subscription/cancel', [SuscripcionController::class, 'cancel'])
+//     ->name('subscription.cancel');
+
+// Route::post('/subscription/resume', [SuscripcionController::class, 'resume'])
+//     ->name('subscription.resume');
+
+// Route::get('/billing', function (Request $request) {
+//     return $request->user()->redirectToBillingPortal(route('dashboard'));
+// })->name('billing');

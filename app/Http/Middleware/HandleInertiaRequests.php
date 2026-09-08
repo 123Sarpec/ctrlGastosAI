@@ -50,25 +50,25 @@ class HandleInertiaRequests extends Middleware
             ];
         }
 
-        $subscribed = $user?->subscribed('default') ?? false;
+        // $subscribed = $user?->subscribed('default') ?? false;
 
-        $plan = null;
+        // $plan = null;
 
-        if ($subscribed) {
-            $plan = match (true) {
-                $user->subscribedToPrice(
-                    config('services.stripe.price_yearly'),
-                    'default'
-                ) => 'yearly',
+        // if ($subscribed) {
+        //     $plan = match (true) {
+        //         $user->subscribedToPrice(
+        //             config('services.stripe.price_yearly'),
+        //             'default'
+        //         ) => 'yearly',
 
-                $user->subscribedToPrice(
-                    config('services.stripe.price_monthly'),
-                    'default'
-                ) => 'monthly',
+        //         $user->subscribedToPrice(
+        //             config('services.stripe.price_monthly'),
+        //             'default'
+        //         ) => 'monthly',
 
-                default => null,
-            };
-        }
+        //         default => null,
+        //     };
+        // }
 
         return [
             ...parent::share($request),
@@ -84,8 +84,8 @@ class HandleInertiaRequests extends Middleware
                     'email' => $user->email,
                     // 'avatar' => $user->avatar,
                 ],
-                'subscription' => $subscribed,
-                'plan' => $plan,
+                // 'subscription' => $subscribed,
+                // 'plan' => $plan,
             ],
         ];
     }

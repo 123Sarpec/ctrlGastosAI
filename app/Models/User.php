@@ -52,28 +52,28 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Presupuesto::class);
     }
 
-    public function currentPlan(): ?string
-    {
-        if (! $this->subscribed('default')) {
-            return null;
-        }
+    // public function currentPlan(): ?string
+    // {   
+    //     if (! $this->subscribed('default')) {
+    //         return null;
+    //     }
 
-        return match (true) {
-            $this->subscribedToPrice(config('services.stripe.price_monthly'), 'default') => 'monthly',
+    //     return match (true) {
+    //         $this->subscribedToPrice(config('services.stripe.price_monthly'), 'default') => 'monthly',
 
-            $this->subscribedToPrice(config('services.stripe.price_yearly'), 'default') => 'yearly',
+    //         $this->subscribedToPrice(config('services.stripe.price_yearly'), 'default') => 'yearly',
 
-            default => null,
-        };
-    }
+    //         default => null,
+    //     };
+    // }
 
-    public function isOnMonthlyPlan(): bool
-    {
-        return $this->currentPlan() === 'monthly';
-    }
+    // public function isOnMonthlyPlan(): bool
+    // {
+    //     return $this->currentPlan() === 'monthly';
+    // }
 
-    public function isOnYearlyPlan(): bool
-    {
-        return $this->currentPlan() === 'yearly';
-    }
+    // public function isOnYearlyPlan(): bool
+    // {
+    //     return $this->currentPlan() === 'yearly';
+    // }
 }

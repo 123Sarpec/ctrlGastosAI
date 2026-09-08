@@ -212,7 +212,7 @@ export default function Show({ presupuesto, categories, spent }: Props) {
 
                 </div>
             </div>
-            {user.subscription ? (
+            {/* {user.subscription ? (
                 <ControgastoAi budgetId={presupuesto.id} name={user.user.name} />
 
             ) : (
@@ -220,8 +220,12 @@ export default function Show({ presupuesto, categories, spent }: Props) {
                     <PrecioTable />
                 </div>
             )
-            }
+            } */}
+            <div className='mt-10'>
+                {/* <PrecioTable /> */}
 
+            </div>
+            <ControgastoAi budgetId={presupuesto.id} name={user.user.name} />
 
             <ExpenseModal />
             <DeleteExpenseModal />
