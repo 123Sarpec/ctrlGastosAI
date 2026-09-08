@@ -147,8 +147,7 @@ Route::prefix('dashboard')->group(function () {
 // Route::get('/plans', function () {
 //     return Inertia::render('Proo/Plans');
 // })->name('plans');
-
-
+  
 
 // Route::get('/subscription', [SuscripcionController::class, 'show'])
 //     ->name('subscription.manage');
